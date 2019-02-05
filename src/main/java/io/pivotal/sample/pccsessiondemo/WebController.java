@@ -10,7 +10,6 @@ import java.util.Enumeration;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
-@SuppressWarnings("unused")
 public class WebController {
   public static final AtomicLong counter = new AtomicLong(1);
 
@@ -30,21 +29,15 @@ public class WebController {
             "counter_value");
   }
 
-  @SuppressWarnings("all")
   private HttpSession printSessionAttributes(String label, HttpSession session) {
-
     Enumeration<String> attributeNames = session.getAttributeNames();
-
     if (attributeNames != null) {
       while (attributeNames.hasMoreElements()) {
-
         String sessionAttributeKey = attributeNames.nextElement();
         Object sessionAttributeValue = session.getAttribute(sessionAttributeKey);
-
         System.out.printf("%s { [%s] = [%s] }%n", label, sessionAttributeKey, sessionAttributeValue);
       }
     }
-
     return session;
   }
 }
