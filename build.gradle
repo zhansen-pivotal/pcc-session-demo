@@ -39,7 +39,9 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web"){
         exclude module: 'spring-boot-starter-logging'
     }
-    // https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-geode
+    compile ("org.springframework.geode:spring-gemfire-starter:$springBootDataGemFireVersion"){
+        exclude module: 'spring-data-gemfire'
+    } 
     compile group: 'org.springframework.session', name: 'spring-session-data-geode', version: '2.1.2.RELEASE'
     compile ("org.apache.logging.log4j:log4j-slf4j-impl:2.11.1")
     runtime "org.slf4j:jcl-over-slf4j:1.7.25"
@@ -47,7 +49,4 @@ dependencies {
     runtime "org.springframework.shell:spring-shell:$springShellVersion"
     compileOnly 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    compile ("org.springframework.geode:spring-gemfire-starter:$springBootDataGemFireVersion"){
-        exclude module: 'spring-data-gemfire'
-    }
 }
