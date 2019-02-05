@@ -1,0 +1,9 @@
+create region \
+    --name=Session \
+    --type=PARTITION_HEAP_LRU \
+    --entry-time-to-live-expiration=60 \
+    --entry-time-to-live-expiration-action=destroy \
+    --enable-statistics \
+    --skip-if-exists
+
+describe region --name=/Session
