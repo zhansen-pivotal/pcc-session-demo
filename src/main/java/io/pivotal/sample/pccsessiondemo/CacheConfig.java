@@ -5,5 +5,5 @@ import org.springframework.stereotype.Component;
 
 @EnableGemFireHttpSession(regionName = "Session")
 @Component
-public class GeodeConfig {
+public class CacheConfig {
 }
