@@ -9,12 +9,11 @@ buildscript {
 }
 
 plugins {
-    id "io.franzbecker.gradle-lombok" version "1.14"
     id "java"
     id "idea"
     id "eclipse"
     id "io.spring.dependency-management" version "1.0.6.RELEASE"
-    id "org.springframework.boot" version "2.0.6.RELEASE"
+    id "org.springframework.boot" version "2.1.2.RELEASE"
 }
 
 
@@ -28,25 +27,43 @@ repositories {
     maven {	url "https://plugins.gradle.org/m2/" }
 }
 
-lombok {
-    version = "$lombokVersion"
-    sha256 = ""
+dependencyManagement {
+    imports {
+        mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+    }
+
+    dependencies {
+        dependency 'org.springframework.geode:spring-gemfire-starter:1.0.0.M3'
+        dependency 'org.springframework.shell:spring-shell:1.2.0.RELEASE'
+        dependency 'io.pivotal.gemfire:geode-core:9.6.0'
+        dependency 'io.pivotal.gemfire:geode-cq:9.6.0'
+        dependency 'io.pivotal.gemfire:geode-lucene:9.6.0'
+        dependency 'io.pivotal.gemfire:geode-wan:9.6.0'
+        dependency 'io.springfox:springfox-swagger2:2.9.2'
+        dependency 'io.springfox:springfox-swagger-ui:2.9.2'
+        dependency 'org.projectlombok:lombok:1.18.4'
+        dependency 'org.mapstruct:mapstruct-processor:1.2.0.Final'
+        dependency 'org.mapstruct:mapstruct-jdk8:1.2.0.Final'
+    }
 }
 
-compileJava.dependsOn(processResources)
-
 dependencies {
+    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
+    
     compile("org.springframework.boot:spring-boot-starter-web"){
         exclude module: 'spring-boot-starter-logging'
     }
-    compile ("org.springframework.geode:spring-gemfire-starter:$springBootDataGemFireVersion"){
-        exclude module: 'spring-data-gemfire'
-    } 
-    compile group: 'org.springframework.session', name: 'spring-session-data-geode', version: '2.1.2.RELEASE'
+//    compile ("org.springframework.geode:spring-gemfire-starter:$springBootDataGemFireVersion"){
+//        exclude module: 'spring-data-gemfire'
+//    }
+    compile ("org.springframework.geode:spring-gemfire-starter")
+    compile group: 'javax.cache', name: 'cache-api', version: '1.1.0'
+    compile group: 'org.springframework.session', name: 'spring-session-data-gemfire', version: '2.1.2.RELEASE'
     compile ("org.apache.logging.log4j:log4j-slf4j-impl:2.11.1")
+    compile group: 'org.apache.oltu.oauth2', name: 'org.apache.oltu.oauth2.client', version: '1.0.2'
     runtime "org.slf4j:jcl-over-slf4j:1.7.25"
     runtime "org.slf4j:jul-to-slf4j:1.7.25"
-    runtime "org.springframework.shell:spring-shell:$springShellVersion"
-    compileOnly 'org.projectlombok:lombok'
+    runtime "org.springframework.shell:spring-shell"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

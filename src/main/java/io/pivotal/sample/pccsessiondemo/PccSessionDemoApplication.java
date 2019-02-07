@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class PccSessionDemoApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(PccSessionDemoApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(PccSessionDemoApplication.class, args);
+    }
 
 }
 
