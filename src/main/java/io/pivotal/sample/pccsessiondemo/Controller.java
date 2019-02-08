@@ -3,7 +3,10 @@ package io.pivotal.sample.pccsessiondemo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.geode.cache.Cache;
 import org.apache.geode.pdx.PdxSerializer;
+import org.apache.oltu.oauth2.client.response.OAuthClientResponseFactory;
 import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
+import org.apache.oltu.oauth2.common.OAuth;
+import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.session.data.gemfire.serialization.pdx.support.ComposablePdxSerializer;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +35,7 @@ public class Controller {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/")
-    public String homepage(HttpSession session) {
+    public String homepage(HttpSession session) throws OAuthProblemException {
 
         PdxSerializer serializer = cache.getPdxSerializer();
         if (serializer instanceof ComposablePdxSerializer) {
@@ -47,7 +50,16 @@ public class Controller {
         System.out.println("Session IsNew = " + session.isNew());
         counter.getAndIncrement();
         session.setAttribute("counter_value", counter);
-        OAuthJSONAccessTokenResponse oAuthJSONAccessTokenResponse = new OAuthJSONAccessTokenResponse();
+        OAuthJSONAccessTokenResponse oAuthJSONAccessTokenResponse = (OAuthJSONAccessTokenResponse) OAuthClientResponseFactory
+                .createJSONTokenResponse("{\n" +
+                                "  \"access_token\" : \"d50d9fd00acf797ac409d5890fcc76669b727e63\",\n" +
+                                "  \"token_type\" : \"Bearer\",\n" +
+                                "  \"expires_in\" : 1295998,\n" +
+                                "  \"refresh_token\" : \"TZzj2yvtWlNP6BvG6UC5UKHXY2Ey6eEo80FSYax6Yv8\"\n" +
+                                "}",
+                        OAuth.ContentType.JSON,
+                        1);
+        log.info("body: " + oAuthJSONAccessTokenResponse.getBody());
         session.setAttribute("oAuthJSONAccessTokenResponse", oAuthJSONAccessTokenResponse);
 
         Entity entity = service.createNewEntity();

@@ -19,14 +19,12 @@ public class OAuthJSONAccessTokenResponseSerializer implements PdxSerializer {
         OAuthJSONAccessTokenResponse instance = (OAuthJSONAccessTokenResponse) o;
         out.writeString("body", instance.getBody());
         out.writeInt("responseCode", instance.getResponseCode());
-        log.info("custom serialization toData trigger");
         return true;
     }
 
     @Override
     public Object fromData(Class<?> clazz, PdxReader in) {
         try {
-            log.info("custom serialization fromData trigger");
             return OAuthClientResponseFactory
                     .createJSONTokenResponse(
                             in.readString("body"),
